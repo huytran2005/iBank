@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +22,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,11 +37,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.Neutral1
 import com.example.myapplication.ui.theme.Neutral4
@@ -56,22 +56,25 @@ fun LoginScreen() {
     var numberphone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
-Scaffold { paddingValues ->
+
+    var numberphonecheck by remember { mutableStateOf(true) }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
             .background(Primary1)
     ) {
-        Text(
-            text = "Sign In",
-            color = Neutral6,
-            style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
-            modifier = Modifier
-                .padding(start = 60.dp)
-                .padding(vertical = 25.dp) // Thêm padding phía dưới header
-        )
-
+        Row(Modifier.fillMaxWidth()) {
+            Text(
+                text = "Sign In",
+                color = Neutral6,
+                style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .padding(start = 60.dp)
+                    .padding(vertical = 25.dp)
+            )
+        }
         Column (
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,10 +100,32 @@ Scaffold { paddingValues ->
             //Number Phone
             OutlinedTextField(
                 value = numberphone,
-                onValueChange = {numberphone=it},
+                onValueChange = { numberphone=it
+                },
                 Modifier.padding(horizontal = 24.dp).fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 placeholder = { Text("Your Number Phone", color = Neutral4) },
+                leadingIcon = {
+
+                    if(numberphone== "0" && numberphonecheck){
+                        numberphonecheck=false
+                        numberphone=""
+
+                    }
+                    if ( !numberphonecheck){
+                        Row (Modifier.padding(start = 10.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Image(
+                                painter = painterResource(R.drawable.ic_flagvn),
+                                contentDescription = "Logo nation",
+                                Modifier.size(30.dp)
+                            )
+                            Text("+84  |", color = Neutral1)
+                        }
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Neutral1,
                     disabledBorderColor = Neutral4,
@@ -121,18 +146,24 @@ Scaffold { paddingValues ->
                     disabledBorderColor = Neutral4,
                     focusedTextColor = Neutral1,
                 ),
+
                 visualTransformation = PasswordVisualTransformation()
             )
-            Text("Forgot your password ?",Modifier.fillMaxWidth().padding(bottom =40.dp, end = 24.dp), textAlign = TextAlign.End)
-            Button(onClick = {},
+                Text(
+                    "Forgot your password ?",
+                    Modifier.fillMaxWidth().padding(bottom = 40.dp, end = 24.dp),
+                    textAlign = TextAlign.End
+                )
+
+                Button(onClick = {},
                 Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(50.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    if(numberphone.isEmpty()||password.isEmpty()) Primary4 else Primary1
-
+                    if(numberphone.isEmpty()||password.isEmpty()) Primary4 else Primary1,
+                    contentColor = Neutral6
                 )
             ) {
-                Text("Sign In")
+                Text("Sign In" )
             }
             Spacer(Modifier.padding(10.dp))
             Image(painter = painterResource(R.drawable.ic_fingerprint),
@@ -143,18 +174,15 @@ Scaffold { paddingValues ->
                 Text("Sign Up ", color = Primary1, fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.weight(0.1f))
-
-
         }
     }
-}
 }
 
 fun authenticateWithFingerprint(context: Context) {
     val executor = ContextCompat.getMainExecutor(context)
 
     val biometricPrompt = BiometricPrompt(
-        context as FragmentActivity,  // ✔️ sửa ComponentActivity → FragmentActivity
+        context as FragmentActivity,
         executor,
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -174,7 +202,6 @@ fun authenticateWithFingerprint(context: Context) {
             }
         }
     )
-
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle("Xác thực vân tay")
         .setSubtitle("Chạm vào cảm biến để đăng nhập")
@@ -182,11 +209,4 @@ fun authenticateWithFingerprint(context: Context) {
         .build()
 
     biometricPrompt.authenticate(promptInfo)
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview(){
-    LoginScreen()
 }

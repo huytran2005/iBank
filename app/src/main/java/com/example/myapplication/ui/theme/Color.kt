@@ -11,7 +11,7 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val Primary1 = Color("#281C9D".toColorInt())
+val Primary1 = Color("#89CFF0".toColorInt())
 val Primary2 = Color("#5655B9".toColorInt())
 val Primary3 =Color("#A8A3D7".toColorInt())
 val Primary4 =Color("#F2F1F9".toColorInt())
