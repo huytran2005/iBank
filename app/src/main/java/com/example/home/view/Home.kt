@@ -69,6 +69,7 @@ fun HomeScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Primary1)
+            .padding(top = 20.dp)
     ) {
         Row(Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -148,7 +149,7 @@ fun CustomBottomNavBar(
     Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -352,7 +353,7 @@ data class BankCard(
 )
 
 enum class CardProvider {
-    VISA
+    VISA,
 }
 
 val card = BankCard(
